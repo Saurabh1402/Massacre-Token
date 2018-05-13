@@ -73,7 +73,7 @@ contract TCoinAdvanced is admined, TCoin{
 	uint256 public sellPrice;
 	uint256 public buyPrice;
 
-	constructor(uint256 initialSupply, string tokenName, string tokenSymbol, uint8 decimalUnits, address centralAdmin) TCoin (0, tokenName, tokenSymbol, decimalUnits ) public {
+	constructor(uint256 initialSupply, string tokenName, string tokenSymbol, uint8 decimalUnits, address centralAdmin) TCoin (initialSupply, tokenName, tokenSymbol, decimalUnits ) public {
 		
 		if(centralAdmin != 0)
 			admin = centralAdmin;
