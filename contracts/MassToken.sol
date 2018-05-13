@@ -150,17 +150,19 @@ contract MassToken is Token,ERC20,ERC223{
         return codeSize>0;
     }
     function transferFrom(address _from, address _to, uint _value) external returns (bool){
-        if(allowances[_from][msg.sender]> 0 &&
-        _value > 0 &&
-        allowances[_from][msg.sender]>=_value &&
-        balanceOf[_from]>=_value){
-            balanceOf[_from]-=_value;
-            balanceOf[_to]+=_value;
-            allowances[_from][msg.sender]-=_value;
-            emit Transfer(_from,_to,_value);
-            return true;
-        }
-        return false;
+        require(allowances[_from][msg.sender]> 0 &&
+            _value > 0 &&
+            allowances[_from][msg.sender]>=_value &&
+            balanceOf[_from]>=_value
+        );
+        
+        balanceOf[_from]-=_value;
+        balanceOf[_to]+=_value;
+        allowances[_from][msg.sender]-=_value;
+        emit Transfer(_from,_to,_value);
+        return true;
+        
+        
     }
     function approve(address _spender,uint _value) external returns (bool success){
         allowances[msg.sender][_spender]=_value;
