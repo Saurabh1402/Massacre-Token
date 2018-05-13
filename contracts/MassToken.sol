@@ -74,23 +74,6 @@ contract Token {
         totalSupply = _totalSupply;
     }
 
-    function name() public constant returns (string) {
-        return name;
-    }
-
-    function symbol() public constant returns (string) {
-        return symbol;
-    }
-
-    function decimals() public constant returns (uint8) {
-        return decimals;
-    }
-
-    function totalSupply() public constant returns (uint) {
-        return totalSupply;
-    }
-
-    function balanceOf(address _addr) public constant returns (uint);
     function transfer(address _to, uint _value) public returns (bool);
     event Transfer(address indexed _from, address indexed _to, uint _value);
 }
@@ -104,8 +87,10 @@ contract MassToken is Token,ERC20,ERC223{
         balanceOf[msg.sender]=_totalSupply;
         admin=msg.sender;
     }
-    function totalSupply() public constant returns (uint){
-        return totalSupply;
+
+    function transferAdminship(address _newAdmin) isAdmin public returns(bool) {
+        admin=_newAdmin;
+        return true;
     }
 
     modifier isAdmin(){
@@ -114,35 +99,44 @@ contract MassToken is Token,ERC20,ERC223{
     }
 
     function addTotalSupply(uint _amount) isAdmin public{
-        totalSupply=_totalSupply.add(_amount);
+        require(_amount>0);
+        totalSupply=totalSupply.add(_amount);
         balanceOf[msg.sender]=balanceOf[msg.sender].add(_amount);
 
     }
     function subtractTotalSupply(uint _amount) isAdmin public{
+        require(_amount>=0);
         require(balanceOf[admin]>=_amount);
-        totalSupply=_totalSupply.sub(_amount);
+        totalSupply=totalSupply.sub(_amount);
         balanceOf[msg.sender]=balanceOf[msg.sender].sub(_amount);
 
     }
-
+    function mintToken(address target, uint256 mintedAmount) isAdmin public returns (bool){
+        require(mintedAmount>=0);
+        balanceOf[target] += mintedAmount;
+        totalSupply += mintedAmount;
+        emit Transfer(0, this, mintedAmount);
+        emit Transfer(this, target, mintedAmount);
+        return true;
+    }
     function transfer(address _to, uint _value) public returns (bool){
         if(_value!=0 &&
-        _value<=_balanceOf[msg.sender]){
+        _value<=balanceOf[msg.sender]){
             balanceOf[msg.sender]-=_value;
             balanceOf[_to]+=_value;
-            Transfer(msg.sender,_to,_value);
+            emit Transfer(msg.sender,_to,_value);
             return true;
         }
         return false;
     }
     function transfer(address _to, uint _value, bytes _data) external returns (bool){
          if(_value!=0 &&
-        _value<=_balanceOf[msg.sender]){
+        _value<=balanceOf[msg.sender]){
             balanceOf[msg.sender]-=_value;
             balanceOf[_to]+=_value;
             ERC223ReceivingContract _contract=ERC223ReceivingContract(_to);
             _contract.tokenFallback(msg.sender,_value,_data);
-            Transfer(msg.sender,_to,_value,_data);
+            emit Transfer(msg.sender,_to,_value,_data);
             return true;
         }
         return false;
@@ -163,14 +157,14 @@ contract MassToken is Token,ERC20,ERC223{
             balanceOf[_from]-=_value;
             balanceOf[_to]+=_value;
             allowances[_from][msg.sender]-=_value;
-            Transfer(_from,_to,_value);
+            emit Transfer(_from,_to,_value);
             return true;
         }
         return false;
     }
     function approve(address _spender,uint _value) external returns (bool success){
         allowances[msg.sender][_spender]=_value;
-        Approval(msg.sender,_spender,_value);
+        emit Approval(msg.sender,_spender,_value);
         return true;
 
     }
