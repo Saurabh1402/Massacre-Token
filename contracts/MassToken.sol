@@ -79,7 +79,7 @@ contract Token {
 }
 
 contract MassToken is Token,ERC20,ERC223{
-    address admin;
+    address public admin;
     using SafeMath for uint256;
 
 

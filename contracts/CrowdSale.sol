@@ -144,18 +144,19 @@ contract CrowdSale {
             payOut();
             completedAt = now;
             
-            } else if ( now > deadline )  {
-                if(totalRaised >= fundingMinimumTargetInWei){
-                    state = State.Successful;
-                    emit LogFundingSuccessful(totalRaised);
-                    payOut();  
-                    completedAt = now;
-                }
-                else{
-                    state = State.Failed; 
-                    completedAt = now;
-                }
-            } 
+        } else if ( now > deadline )  {
+            if(totalRaised >= fundingMinimumTargetInWei){
+                state = State.Successful;
+                emit LogFundingSuccessful(totalRaised);
+                payOut();  
+                completedAt = now;
+            }
+            else{
+                state = State.Failed; 
+                completedAt = now;
+                getRefund();
+            }
+        } 
         
     }
 
