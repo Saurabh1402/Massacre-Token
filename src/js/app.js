@@ -14,7 +14,7 @@ App={
 			App.web3Provider=web3.currentProvider;
 			web3=new Web3(web3.currentProvider);
 		}else{
-			App.web3Provider=new Web3.providers.HttpProvider("http://localhost:8545");
+			App.web3Provider=new Web3.providers.HttpProvider("https://rinkeby.infura.io/ygSC9EPQzpdB13FybRGG");
 			web3=new Web3(App.web3Provider);
 		}
 		return App.initContract();
@@ -102,7 +102,7 @@ App={
 				gas:500000
 			})
 		}).then(function(result){
-			console.log(result);
+			alert(result);
 		});
 	}
 }
