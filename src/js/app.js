@@ -20,7 +20,7 @@ App={
 		return App.initContract();
 	},
 	initContract:function(){
-		$.getJSON("CrowdSale.json",function(CrowdSaleJSON){
+		$.getJSON("./js/CrowdSale.json",function(CrowdSaleJSON){
 			//console.log("CrowdSale laoded successfully");
 			App.contracts.CrowdSale = TruffleContract(CrowdSaleJSON);
 			App.contracts.CrowdSale.setProvider(App.web3Provider);
@@ -28,7 +28,7 @@ App={
 				console.log("CrowdSale Address: ",crowdSale.address);
 			});
 		}).done(function(){
-			$.getJSON("MassToken.json",function(MassTokenJSON){
+			$.getJSON("./js/MassToken.json",function(MassTokenJSON){
 			//console.log("CrowdSale laoded successfully");
 				App.contracts.MassToken = TruffleContract(MassTokenJSON);
 				App.contracts.MassToken.setProvider(App.web3Provider);
