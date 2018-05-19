@@ -10,11 +10,12 @@ module.exports = {
       network_id: "*", // Match any network id
     },
     rinkeby: {
-      provider: function() {
-        return new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/ygSC9EPQzpdB13FybRGG");
-      },
-      network_id: 4
-    } 
+      host: "localhost", // Connect to geth on the specified
+      port: 8545,
+      //from: 0xf1bc156395c41231efb7ddda14766acc34fabcae,
+      network_id: 4,
+      gas: 2000000 // Gas limit used for deploys
+    }
   }
 };
 
@@ -28,3 +29,11 @@ module.exports = {
 //       network_id: 4,
 //       gas: 500000 // Gas limit used for deploys
 //     }
+
+
+// rinkeby: {
+//       provider: function() {
+//         return new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/ygSC9EPQzpdB13FybRGG");
+//       },
+//       network_id: 4
+//     } 

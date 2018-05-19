@@ -99,7 +99,7 @@ App={
 			return instance.contribute({
 				from:account,
 				value:ether_amount,
-				gas:500000
+				gas:200000
 			})
 		}).then(function(result){
 			alert(result);
